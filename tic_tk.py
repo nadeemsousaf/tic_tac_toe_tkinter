@@ -12,6 +12,7 @@ font2 = ("Arial", 20, "bold")
 empty = "    "
 user = " X "
 opponent = " O "
+game_over = False
 
 board = []
 taken_positions = 0
@@ -44,7 +45,7 @@ def new_move():
 
 def opponent_play(): #generate opponent move
     found_move = False
-    while found_move == False and taken_positions < 9:
+    while found_move == False and game_over == False:
         position = random.randrange(0,8)
         if board[position].type == empty:
             found_move = True #we have found a valid move
@@ -76,10 +77,10 @@ def load_board():
     for i in board:
         canvas.create_window(i.x_num, i.y_num, window = i.button)
     canvas.create_window(1425, 55, window = button_quit)
-    canvas.create_window(130, 55, window = button_restart) #here
+    canvas.create_window(130, 55, window = button_restart)
 
 def formal_end_game(message):
-    canvas.create_text(800, 100, text = message, font=font2)
+    canvas.itemconfig(status_text, text=message)
     disable_squares()
 
 def disable_squares():
@@ -93,26 +94,28 @@ def disable_squares():
     button_r3_c2.configure(state="disabled")
     button_r3_c3.configure(state="disabled")
 
-def enable_squares(): #here
-    button_r1_c1.configure(state="normal")
-    button_r1_c2.configure(state="normal")
-    button_r1_c3.configure(state="normal")
-    button_r2_c1.configure(state="normal")
-    button_r2_c2.configure(state="normal")
-    button_r2_c3.configure(state="normal")
-    button_r3_c1.configure(state="normal")
-    button_r3_c2.configure(state="normal")
-    button_r3_c3.configure(state="normal")
+def enable_squares():
+    button_r1_c1.configure(state="normal", text=empty)
+    button_r1_c2.configure(state="normal", text=empty)
+    button_r1_c3.configure(state="normal", text=empty)
+    button_r2_c1.configure(state="normal", text=empty)
+    button_r2_c2.configure(state="normal", text=empty)
+    button_r2_c3.configure(state="normal", text=empty)
+    button_r3_c1.configure(state="normal", text=empty)
+    button_r3_c2.configure(state="normal", text=empty)
+    button_r3_c3.configure(state="normal", text=empty)
 
-def reset_globals(): #here
-    global board, taken_positions, player
+def reset_globals():
+    global board, taken_positions, player, game_over
     board = []
     taken_positions = 0
     player = user
+    game_over = False
 
-def reset_board(): #here
+def reset_board():
     enable_squares()
     reset_globals()
+    canvas.itemconfig(status_text, text=empty)
     start()
 
 def valid_move(button, position):
@@ -183,14 +186,17 @@ def check_game_status():
     create_message(player_win, player_tie)
 
 def create_message(player_win, player_tie):
+    global game_over
     if player_win != False:
         if player_win == user:
             formal_end_game("Congratulations, you won!")
         else:
             formal_end_game("Sorry, you lost!")
+        game_over = True
     else:
         if player_tie != False:
             formal_end_game("We have a tie!")
+            game_over = True
 
 #game buttons
 button_r1_c1 = Button(game, text = empty, font = font1, command=r1_c1)
@@ -203,8 +209,10 @@ button_r3_c1 = Button(game, text = empty, font = font1, command=r3_c1)
 button_r3_c2 = Button(game, text = empty, font = font1, command=r3_c2)
 button_r3_c3 = Button(game, text = empty, font = font1, command=r3_c3)
 button_quit = Button(game, text = "Quit Game", font = font2, command=game.destroy)
+button_restart = Button(game, text = "Restart Game", font = font2, command=reset_board)
 
-button_restart = Button(game, text = "Restart Game", font = font2, command=reset_board) #here
+#message
+status_text = canvas.create_text(800, 100, text = empty, font=font2)
 
 player = user #setting current player turn
 
