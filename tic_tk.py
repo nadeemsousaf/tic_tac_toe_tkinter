@@ -76,6 +76,7 @@ def load_board():
     for i in board:
         canvas.create_window(i.x_num, i.y_num, window = i.button)
     canvas.create_window(1425, 55, window = button_quit)
+    canvas.create_window(130, 55, window = button_restart) #here
 
 def formal_end_game(message):
     canvas.create_text(800, 100, text = message, font=font2)
@@ -91,6 +92,28 @@ def disable_squares():
     button_r3_c1.configure(state="disabled")
     button_r3_c2.configure(state="disabled")
     button_r3_c3.configure(state="disabled")
+
+def enable_squares(): #here
+    button_r1_c1.configure(state="normal")
+    button_r1_c2.configure(state="normal")
+    button_r1_c3.configure(state="normal")
+    button_r2_c1.configure(state="normal")
+    button_r2_c2.configure(state="normal")
+    button_r2_c3.configure(state="normal")
+    button_r3_c1.configure(state="normal")
+    button_r3_c2.configure(state="normal")
+    button_r3_c3.configure(state="normal")
+
+def reset_globals(): #here
+    global board, taken_positions, player
+    board = []
+    taken_positions = 0
+    player = user
+
+def reset_board(): #here
+    enable_squares()
+    reset_globals()
+    start()
 
 def valid_move(button, position):
     global taken_positions
@@ -180,6 +203,8 @@ button_r3_c1 = Button(game, text = empty, font = font1, command=r3_c1)
 button_r3_c2 = Button(game, text = empty, font = font1, command=r3_c2)
 button_r3_c3 = Button(game, text = empty, font = font1, command=r3_c3)
 button_quit = Button(game, text = "Quit Game", font = font2, command=game.destroy)
+
+button_restart = Button(game, text = "Restart Game", font = font2, command=reset_board) #here
 
 player = user #setting current player turn
 
