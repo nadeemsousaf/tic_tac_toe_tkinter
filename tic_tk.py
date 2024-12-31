@@ -34,7 +34,6 @@ def create_board():
     board.append(square(button_r3_c2,800,650,empty))
     board.append(square(button_r3_c3,1000,650,empty))
 
-
 def new_move():
     global player
     if player == user:
@@ -45,7 +44,7 @@ def new_move():
 
 def opponent_play(): #generate opponent move
     found_move = False
-    while found_move == False:
+    while found_move == False and taken_positions < 9:
         position = random.randrange(0,8)
         if board[position].type == empty:
             found_move = True #we have found a valid move
@@ -80,6 +79,18 @@ def load_board():
 
 def formal_end_game(message):
     canvas.create_text(800, 100, text = message, font=font2)
+    disable_squares()
+
+def disable_squares():
+    button_r1_c1.configure(state="disabled")
+    button_r1_c2.configure(state="disabled")
+    button_r1_c3.configure(state="disabled")
+    button_r2_c1.configure(state="disabled")
+    button_r2_c2.configure(state="disabled")
+    button_r2_c3.configure(state="disabled")
+    button_r3_c1.configure(state="disabled")
+    button_r3_c2.configure(state="disabled")
+    button_r3_c3.configure(state="disabled")
 
 def valid_move(button, position):
     global taken_positions
@@ -144,10 +155,9 @@ def check_game_status():
         player_win = player
     if board[2].type == player and board[4].type == player and board[6].type == player:
         player_win = player
-    if taken_positions == 9:
+    if taken_positions >= 9:
         player_tie = True
     create_message(player_win, player_tie)
-
 
 def create_message(player_win, player_tie):
     if player_win != False:
@@ -156,7 +166,7 @@ def create_message(player_win, player_tie):
         else:
             formal_end_game("Sorry, you lost!")
     else:
-        if player_tie == True:
+        if player_tie != False:
             formal_end_game("We have a tie!")
 
 #game buttons
@@ -173,6 +183,6 @@ button_quit = Button(game, text = "Quit Game", font = font2, command=game.destro
 
 player = user #setting current player turn
 
-start()
+start() #call first function
 
 game.mainloop()
