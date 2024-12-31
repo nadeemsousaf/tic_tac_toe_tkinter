@@ -16,7 +16,6 @@ opponent = " O "
 board = []
 taken_positions = 0
 
-
 class square:
     def __init__(self, button, x_num, y_num, type):
         self.button = button
@@ -80,9 +79,7 @@ def load_board():
     canvas.create_window(1425, 55, window = button_quit)
 
 def formal_end_game(message):
-    canvas.pack_forget()
-    canvas.create_window(800, 450, window = button_quit)
-    canvas.create_text(800, 300, text = message)
+    canvas.create_text(800, 100, text = message, font=font2)
 
 def valid_move(button, position):
     global taken_positions
@@ -127,7 +124,6 @@ def r3_c2():
 def r3_c3():
     if(button_r3_c3["text"]==empty):
         valid_move(button_r3_c3, 8)
-
 
 def check_game_status():
     player_win = False
