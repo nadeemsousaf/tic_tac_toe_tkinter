@@ -107,6 +107,7 @@ def enable_squares():
 
 def reset_globals():
     global board, taken_positions, player, game_over
+    canvas.itemconfig(status_text, text=empty)
     board = []
     taken_positions = 0
     player = user
@@ -115,7 +116,6 @@ def reset_globals():
 def reset_board():
     enable_squares()
     reset_globals()
-    canvas.itemconfig(status_text, text=empty)
     start()
 
 def valid_move(button, position):
